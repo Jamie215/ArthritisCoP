@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    {% extends "base.html" %}
+
+    {% block content %}
+    <div class="card-header">
+        <h3>{{ thread.title }}</h3>
+    </div>
+    <div class="card-body">
+        <p class="card-text">{{ thread.description }}</p>
+        <p><small>Posted on {{ thread.date }}</small></p>
+    </div>
+
+    <!-- Comments Section -->
+    <h4>Comments</h4>
+    {% for comment in thread.comments.all %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <p class="card-text">{{ comment.text }}</p>
+                <p><small>Posted on {{ comment.date }}</small></p>
+                <p>Upvotes: {{ comment.upvotes }}</p>
+            </div>
+        </div>
+    {% empty %}
+        <p>No comments yet. Be the first to comment!</p>
+    {% endfor %}
+
+    <!-- Comment Form to add a new comment -->
+    <h5>Add a Comment</h5>
+    <form method="post">
+        {% csrf_token %}
+        <textarea class="form-control mb-2" name="comment_text" placeholder="Write your comment..."></textarea>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endblock %}
+</body>
+</html>
