@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+
 from .models import Thread, Comment
-from .forms import ThreadForm
+from .forms import ThreadForm, CommentForm
 
 def thread_list(request):
     all_threads = Thread.objects.all()
@@ -9,13 +11,29 @@ def thread_list(request):
 def thread_detail(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     comments = Comment.objects.filter(thread=thread).order_by('-date')
-    
+
     # Handle new comment submissions
     if request.method == "POST":
-        text = request.POST.get('comment_text')
-        Comment.objects.create(thread=thread, text=text)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.thread = thread
+            comment.save()
+        else:
+            print(form.errors)
+        return redirect('thread_detail', thread_id=thread.id)
+    elif request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        comments_data = [{"id": comment.id, "text": comment.text} for comment in comments]
+        return JsonResponse(comments_data, safe=False)
+    else:
+        form = CommentForm()
+        comments = Comment.objects.filter(thread=thread).order_by('-date')
 
-    return render(request, 'thread_detail.html', {'thread': thread, 'comments': comments})
+    return render(request, 'thread_detail.html', {
+                                                    'thread': thread, 
+                                                    'comments': comments,
+                                                    'form': form
+                                                })
 
 def create_thread(request):
     if request.method == "POST":

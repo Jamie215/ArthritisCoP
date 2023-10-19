@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
 </head>
 <body>
     {% extends "base.html" %}
-
+    <!-- other HTML content -->
+    {% load static %}
+    
     {% block content %}
     <div class="card-header">
         <h3>{{ thread.title }}</h3>
@@ -18,7 +22,8 @@
 
     <!-- Comments Section -->
     <h4>Comments</h4>
-    {% for comment in thread.comments.all %}
+    <div id="comments-container" data-thread-id="{{ thread.id }}" data-url="{% url 'thread_detail' thread.id %}">
+        {% for comment in thread.comments.all %}
         <div class="card mb-2">
             <div class="card-body">
                 <p class="card-text">{{ comment.text }}</p>
@@ -26,17 +31,21 @@
                 <p>Upvotes: {{ comment.upvotes }}</p>
             </div>
         </div>
-    {% empty %}
-        <p>No comments yet. Be the first to comment!</p>
-    {% endfor %}
+        {% empty %}
+            <p>No comments yet. Be the first to comment!</p>
+        {% endfor %}
+    </div>
+    
 
     <!-- Comment Form to add a new comment -->
     <h5>Add a Comment</h5>
-    <form method="post">
+    <form method="post" id="comment-form">
         {% csrf_token %}
-        <textarea class="form-control mb-2" name="comment_text" placeholder="Write your comment..."></textarea>
+        <textarea class="form-control mb-2" name="text" placeholder="Write your comment..."></textarea>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+
+    <script src="{% static 'js/comments.js' %}"></script>
     {% endblock %}
 </body>
 </html>

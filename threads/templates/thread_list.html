@@ -8,7 +8,6 @@
     {% extends "base.html" %}
 
     {% block content %}
-    <a href="{% url 'create_thread' %}" class="btn btn-primary">Create New Thread</a>
     <table>
         <tbody>
             {% for thread in threads %}
