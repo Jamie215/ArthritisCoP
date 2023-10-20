@@ -17,6 +17,11 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle naviation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <form class="form-inline" action="{% url 'search_redirect' %}" method="post">
+                {% csrf_token %}
+                <input type="search" class="form-control rounded" placeholder="Search..." name="q" aria-label="Search"/>
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
             <a href="{% url 'create_thread' %}" class="btn btn-primary">Create New Thread</a>
         </div>
     </nav>

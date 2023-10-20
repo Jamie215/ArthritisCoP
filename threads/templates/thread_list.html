@@ -8,6 +8,7 @@
     {% extends "base.html" %}
 
     {% block content %}
+    <h4>{{ threads.count }} Threads </h4>
     <table>
         <tbody>
             {% for thread in threads %}
@@ -15,6 +16,7 @@
                 <td><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></td>
                 <td>{{ thread.description }}</td>
                 <td>{{ thread.date }}</td>
+                <td>{{ thread.comment_set.count }}</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -5,4 +5,6 @@ urlpatterns = [
     path('', views.thread_list, name='thread_list'),
     path('<int:thread_id>/', views.thread_detail, name='thread_detail'),
     path('create/', views.create_thread, name='create_thread'),
+    path('search/', views.search_redirect, name='search_redirect'),
+    path('search/<str:query>/', views.search_results, name='search_results'),
 ]

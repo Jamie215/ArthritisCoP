@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    {% extends "base.html" %}
+    
+    {% block content %}
+        <h2>Search Results for <b>"{{ query }}"</b></h2>
+        {% if results.count > 0 %}
+            <h4><b>{{ results.count }}</b> Threads </h4>
+        {% else %}
+            <h4><b>0</b> Threads</h4>    
+        {% endif%}
+
+        {% if results %}
+            <table>
+                <tbody>
+                    {% for thread in results %}
+                    <tr>
+                        <td><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></td>
+                        <td>{{ thread.description }}</td>
+                        <td>{{ thread.date }}</td>
+                        <td>{{ thread.comment_set.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h5>No results</h5>
+        {% endif %}
+        {% endblock %}
+</body>
+</html>

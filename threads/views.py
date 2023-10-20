@@ -45,3 +45,11 @@ def create_thread(request):
         form = ThreadForm()
     
     return render(request, 'create_thread.html', {'form': form})
+
+def search_redirect(request):
+    query = request.POST.get('q')
+    return redirect('search_results', query=query)
+
+def search_results(request, query):
+    results = Thread.objects.filter(title__icontains=query)
+    return render(request, 'search_results.html', {'results':results, 'query':query})
