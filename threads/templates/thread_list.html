@@ -16,7 +16,8 @@
                 <td><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></td>
                 <td>{{ thread.description }}</td>
                 <td>{{ thread.date }}</td>
-                <td>{{ thread.comment_set.count }}</td>
+                <td>{{ thread.comment_set.count }} comments</td>
+                <td>{{ thread.view_count }} views</td>
             </tr>
             {% endfor %}
         </tbody>

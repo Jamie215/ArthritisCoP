@@ -7,6 +7,7 @@ class Thread(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     upvotes = models.PositiveIntegerField(default=0)
     downvotes = models.PositiveIntegerField(default=0)
+    view_count = models.PositiveIntegerField(default=0)
 
 class Comment(models.Model):
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)

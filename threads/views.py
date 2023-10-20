@@ -29,6 +29,9 @@ def thread_detail(request, thread_id):
         form = CommentForm()
         comments = Comment.objects.filter(thread=thread).order_by('-date')
 
+    # Update the thread's view count
+    thread.view_count += 1
+    thread.save()
     return render(request, 'thread_detail.html', {
                                                     'thread': thread, 
                                                     'comments': comments,
