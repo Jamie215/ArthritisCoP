@@ -23,7 +23,7 @@ function loadSortedThreads(sortOrder, context=null, query=null) {
             
                 const titleCol = document.createElement('td');
                 const titleLink = document.createElement('a');
-                titleLink.href = '/${thread.id}';
+                titleLink.href = `/${thread.id}`;
                 titleLink.textContent = thread.title;
                 titleCol.appendChild(titleLink);
 
