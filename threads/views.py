@@ -6,7 +6,10 @@ from .forms import ThreadForm, CommentForm
 
 def thread_list(request):
     all_threads = Thread.objects.all()
-    return render(request, 'thread_list.html', {'threads': all_threads})
+    context = {
+        'threads': all_threads
+    }
+    return render(request, 'thread_list.html', context)
 
 def thread_detail(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
@@ -56,3 +59,30 @@ def search_redirect(request):
 def search_results(request, query):
     results = Thread.objects.filter(title__icontains=query)
     return render(request, 'search_results.html', {'results':results, 'query':query})
+
+def get_sorted_threads(request):
+    sort_order = request.GET.get('sort', 'recent')
+    context = request.GET.get('context', 'thread_list')
+    query = request.GET.get('query', '')
+
+    if context == 'search_results' and query:
+        threads = Thread.objects.filter(title__icontains=query)
+    else:
+        threads = Thread.objects.all()
+    
+    if sort_order == 'views':
+        threads= threads.order_by('-view_count','-date')
+    else:
+        threads = Thread.objects.all().order_by('-date')
+
+    # Check if the request is Ajax
+    data = [{
+            'id': thread.id,
+            'title': thread.title,
+            'description': thread.description,
+            'date': str(thread.date),
+            'view_count': thread.view_count,
+            'comment_count': thread.comment_set.count()
+        } for thread in threads]
+
+    return JsonResponse(data, safe=False)

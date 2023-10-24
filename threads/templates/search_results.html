@@ -6,7 +6,9 @@
 </head>
 <body>
     {% extends "base.html" %}
-    
+    <!-- other HTML content -->
+    {% load static %}
+
     {% block content %}
         <h2>Search Results for <b>"{{ query }}"</b></h2>
         {% if results.count > 0 %}
@@ -16,8 +18,10 @@
         {% endif%}
 
         {% if results %}
+        <button class="sort-button" id="sort-most-recent" data-sort="date" onclick="loadSortedThreads('date'); return false;">Sort bt Most Recent</button>
+        <button class="sort-button" id="sort-most-views" data-sort="view_count" onclick="loadSortedThreads('view_count'); return false;">Sort by Most Views</button>
             <table>
-                <tbody>
+                <tbody id="threads-container">
                     {% for thread in results %}
                     <tr>
                         <td><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></td>
@@ -32,6 +36,7 @@
         {% else %}
             <h5>No results</h5>
         {% endif %}
-        {% endblock %}
+    <script src="{% static 'js/threads.js' %}"></script>
+    {% endblock %}
 </body>
 </html>

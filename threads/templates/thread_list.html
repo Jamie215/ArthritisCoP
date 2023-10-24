@@ -6,11 +6,15 @@
 </head>
 <body>
     {% extends "base.html" %}
+    <!-- other HTML content -->
+    {% load static %}
 
     {% block content %}
     <h4>{{ threads.count }} Threads </h4>
+    <button class="sort-button" id="sort-most-recent" data-sort="date" onclick="loadSortedThreads('recent', 'search_results'); return false;">Sort bt Most Recent</button>
+    <button class="sort-button" id="sort-most-views" data-sort="view_count" onclick="loadSortedThreads('views', 'search_results'); return false;">Sort by Most Views</button>
     <table>
-        <tbody>
+        <tbody id="threads-container">
             {% for thread in threads %}
             <tr>
                 <td><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></td>
@@ -22,6 +26,7 @@
             {% endfor %}
         </tbody>
     </table>
+    <script src="{% static 'js/threads.js' %}"></script>
     {% endblock %}
 </body>
 </html>
