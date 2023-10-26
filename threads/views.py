@@ -1,14 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-
+from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 from .models import Thread, Comment
 from .forms import ThreadForm, CommentForm
 
 def thread_list(request):
     all_threads = Thread.objects.all()
+    
+    # Check if the user is a moderator
+    is_moderator= request.user.groups.filter(name='Moderators').exists() or request.user.is_superuser
+
     context = {
-        'threads': all_threads
+        'results': all_threads,
+        'is_moderator': is_moderator
     }
+
     return render(request, 'thread_list.html', context)
 
 def thread_detail(request, thread_id):
@@ -58,7 +65,15 @@ def search_redirect(request):
 
 def search_results(request, query):
     results = Thread.objects.filter(title__icontains=query)
-    return render(request, 'search_results.html', {'results':results, 'query':query})
+    is_moderator= request.user.groups.filter(name='Moderators').exists() or request.user.is_superuser
+
+    context = {
+        'results': results,
+        'is_moderator': is_moderator,
+        'query': query,
+    }
+
+    return render(request, 'search_results.html', context)
 
 def get_sorted_threads(request):
     sort_order = request.GET.get('sort', 'recent')
@@ -86,3 +101,24 @@ def get_sorted_threads(request):
         } for thread in threads]
 
     return JsonResponse(data, safe=False)
+
+@login_required
+@require_http_methods(["DELETE"])
+def delete_thread(request, thread_id):
+    if not (request.user.groups.filter(name='Moderators').exists() or request.user.is_superuser):
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+    
+    thread = get_object_or_404(Thread, id=thread_id)
+    thread.delete()
+
+    return JsonResponse({'message': 'Thread successfully deleted'})
+
+# def delete_comment(request, comment_id):
+#     if not request.user.groups.filter(name='Moderators').exists():
+#         messages.error(request, "You don't have permission to access this feature.")
+#         return redirect('thread_detail', thread_id=comment.thread.id)
+    
+#     comment = get_object_or_404(Comment, id=comment_id)
+#     comment.delete()
+#     messages.success(request, "Comment successfully deleted")
+#     return redirect('thread_detail', thread_id=comment.thread.id)

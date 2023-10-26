@@ -10,20 +10,13 @@
     {% load static %}
 
     {% block content %}
-    <h4>{{ threads.count }} Threads </h4>
+    <h4>{{ results.count }} Threads </h4>
     <button class="sort-button" id="sort-most-recent" data-sort="date" onclick="loadSortedThreads('recent', 'search_results'); return false;">Sort bt Most Recent</button>
     <button class="sort-button" id="sort-most-views" data-sort="view_count" onclick="loadSortedThreads('views', 'search_results'); return false;">Sort by Most Views</button>
+    <div id="isModerator" data-is-moderator="{{ is_moderator }}"></div>
+
     <table>
         <tbody id="threads-container">
-            {% for thread in threads %}
-            <tr>
-                <td><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></td>
-                <td>{{ thread.description }}</td>
-                <td>{{ thread.date }}</td>
-                <td>{{ thread.comment_set.count }} comments</td>
-                <td>{{ thread.view_count }} views</td>
-            </tr>
-            {% endfor %}
         </tbody>
     </table>
     <script src="{% static 'js/threads.js' %}"></script>

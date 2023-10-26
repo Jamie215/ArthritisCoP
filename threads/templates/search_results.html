@@ -22,15 +22,6 @@
         <button class="sort-button" id="sort-most-views" data-sort="view_count" onclick="loadSortedThreads('view_count'); return false;">Sort by Most Views</button>
             <table>
                 <tbody id="threads-container">
-                    {% for thread in results %}
-                    <tr>
-                        <td><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></td>
-                        <td>{{ thread.description }}</td>
-                        <td>{{ thread.date }}</td>
-                        <td>{{ thread.comment_set.count }} comments</td>
-                        <td>{{ thread.view_count }} views</td>
-                    </tr>
-                    {% endfor %}
                 </tbody>
             </table>
         {% else %}
