@@ -21,7 +21,6 @@ function loadComments() {
             }
             else {
                 comments.forEach(comment => {
-                    console.log("comment:",comment)
                     let commentCard = document.createElement('div');
                     commentCard.className = 'card mb-2';
                     commentCard.setAttribute('id', `comment-${comment.id}`);
@@ -39,7 +38,16 @@ function loadComments() {
 
                     let commentUpvotes = document.createElement('p');
                     commentUpvotes.textContent = `Upvotes: ${comment.upvotes}`;
-                
+                    
+                    if (isModerator) {
+                        console.log("im in the if");
+                        const deleteButton = document.createElement('button');
+                        deleteButton.addEventListener('click', function() {
+                            deleteComment(comment.id);
+                        })
+                        commentCard.appendChild(deleteButton);
+                    }
+
                     cardBody.appendChild(commentText);
                     cardBody.appendChild(commentDate);
                     cardBody.appendChild(commentUpvotes);
@@ -64,7 +72,7 @@ function getCookie(name) {
 
 function deleteComment(commentId) {
     let xhr = new XMLHttpRequest();
-    xhr.open('DELETE', `/delete_comment/${commentId}/`, true)
+    xhr.open('DELETE', `/delete_comment/${commentId}/`, true);
 
     // Set the CSRF token
     xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));

@@ -27,6 +27,9 @@ def thread_detail(request, thread_id):
     thread = get_object_or_404(Thread, id=thread_id)
     comments = Comment.objects.filter(thread=thread).order_by('-date')
 
+    # Check if the user is a moderator
+    is_moderator= request.user.groups.filter(name='Moderators').exists() or request.user.is_superuser
+
     # Handle new comment submissions
     if request.method == "POST":
         form = CommentForm(request.POST)
@@ -55,7 +58,8 @@ def thread_detail(request, thread_id):
     return render(request, 'thread_detail.html', {
                                                     'thread': thread, 
                                                     'comments': comments,
-                                                    'form': form
+                                                    'form': form,
+                                                    'is_moderator': is_moderator
                                                 })
 
 def create_thread(request):

@@ -11,5 +11,5 @@ urlpatterns = [
     path('search/', views.search_redirect, name='search_redirect'),
     path('search/<str:query>/', views.search_results, name='search_results'),
     path('delete_thread/<int:thread_id>/', views.delete_thread, name='delete_thread'),
-    path('delete_comment/<int:commend_id>/', views.delete_comment, name='delete_comment'),
+    path('delete_comment/<int:comment_id>/', views.delete_comment, name='delete_comment'),
 ]
