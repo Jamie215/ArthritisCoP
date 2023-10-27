@@ -50,7 +50,6 @@ function loadSortedThreads(sortOrder, context=null, query=null) {
 
                 // Additional Column for Moderators
                 if (isModerator) {
-                    console.log("I am in isModerator if statement");
                     const actionCol = document.createElement('td');
                     const deleteButton = document.createElement('button');
                     deleteButton.textContent = 'Delete'

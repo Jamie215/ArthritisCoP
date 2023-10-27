@@ -22,21 +22,10 @@
 
     <!-- Comments Section -->
     <h4>Comments</h4>
+    <div id="isModerator" data-is-moderator="{{ is_moderator }}"></div>
     <div id="comments-container" data-thread-id="{{ thread.id }}" data-url="{% url 'thread_detail' thread.id %}">
-        {% for comment in thread.comments.all %}
-        <div class="card mb-2">
-            <div class="card-body">
-                <p class="card-text">{{ comment.text }}</p>
-                <p><small>Posted on {{ comment.date }}</small></p>
-                <p>Upvotes: {{ comment.upvotes }}</p>
-            </div>
-        </div>
-        {% empty %}
-            <p>No comments yet. Be the first to comment!</p>
-        {% endfor %}
     </div>
     
-
     <!-- Comment Form to add a new comment -->
     <h5>Add a Comment</h5>
     <form method="post" id="comment-form">

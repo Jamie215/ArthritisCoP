@@ -105,20 +105,33 @@ def get_sorted_threads(request):
 @login_required
 @require_http_methods(["DELETE"])
 def delete_thread(request, thread_id):
-    if not (request.user.groups.filter(name='Moderators').exists() or request.user.is_superuser):
-        return JsonResponse({'error': 'Unauthorized'}, status=401)
+    try:
+        if not (request.user.groups.filter(name='Moderators').exists() or request.user.is_superuser):
+            return JsonResponse({'error': 'Unauthorized'}, status=401)
+        
+        thread = get_object_or_404(Thread, id=thread_id)
+        thread.delete()
+        return JsonResponse({'message': 'Thread successfully deleted'})
     
-    thread = get_object_or_404(Thread, id=thread_id)
-    thread.delete()
-
-    return JsonResponse({'message': 'Thread successfully deleted'})
-
-# def delete_comment(request, comment_id):
-#     if not request.user.groups.filter(name='Moderators').exists():
-#         messages.error(request, "You don't have permission to access this feature.")
-#         return redirect('thread_detail', thread_id=comment.thread.id)
+    except Thread.DoesNotExist:
+        return JsonResponse({'message': 'Thread does not exist'}, status=404)
     
-#     comment = get_object_or_404(Comment, id=comment_id)
-#     comment.delete()
-#     messages.success(request, "Comment successfully deleted")
-#     return redirect('thread_detail', thread_id=comment.thread.id)
+    except Exception as e:
+        return JsonResponse({'message': e}, status=500)
+
+@login_required
+@require_http_methods(["DELETE"])
+def delete_comment(request, comment_id):
+    try:
+        if not (request.user.groups.filter(name='Moderators').exists() or request.user.is_superuser):
+            return JsonResponse({'error': 'Unauthorized'}, status=401)
+        
+        comment = get_object_or_404(Comment, id=comment_id)
+        comment.delete()
+        return JsonResponse({'message': 'Comment successfully deleted'})
+    
+    except Comment.DoesNotExist:
+        return JsonResponse({'message': 'Comment does not exist'}, status=404)
+    
+    except Exception as e:
+        return JsonResponse({'message': e}, status=500)

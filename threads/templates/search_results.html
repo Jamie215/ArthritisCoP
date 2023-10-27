@@ -6,7 +6,7 @@
 </head>
 <body>
     {% extends "base.html" %}
-    <!-- other HTML content -->
+    <!-- Other HTML content -->
     {% load static %}
 
     {% block content %}
@@ -18,8 +18,9 @@
         {% endif%}
 
         {% if results %}
-        <button class="sort-button" id="sort-most-recent" data-sort="date" onclick="loadSortedThreads('date'); return false;">Sort bt Most Recent</button>
-        <button class="sort-button" id="sort-most-views" data-sort="view_count" onclick="loadSortedThreads('view_count'); return false;">Sort by Most Views</button>
+            <button class="sort-button" id="sort-most-recent" data-sort="date" onclick="loadSortedThreads('date'); return false;">Sort bt Most Recent</button>
+            <button class="sort-button" id="sort-most-views" data-sort="view_count" onclick="loadSortedThreads('view_count'); return false;">Sort by Most Views</button>
+            <div id="isModerator" data-is-moderator="{{ is_moderator }}"></div>
             <table>
                 <tbody id="threads-container">
                 </tbody>
