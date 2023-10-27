@@ -5,6 +5,11 @@ from django.contrib.auth.decorators import login_required
 from .models import Thread, Comment
 from .forms import ThreadForm, CommentForm
 
+
+####################
+## Thread Related ##
+####################
+
 def thread_list(request):
     all_threads = Thread.objects.all()
     
@@ -33,7 +38,12 @@ def thread_detail(request, thread_id):
             print(form.errors)
         return redirect('thread_detail', thread_id=thread.id)
     elif request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        comments_data = [{"id": comment.id, "text": comment.text} for comment in comments]
+        comments_data = [{"id": comment.id, 
+                          "text": comment.text,
+                          "date": comment.date.strftime('%Y-%m-%d %H:%M:%S'),
+                          "upvotes": comment.upvotes,
+                          "downvotes": comment.downvotes}
+                          for comment in comments]
         return JsonResponse(comments_data, safe=False)
     else:
         form = CommentForm()
