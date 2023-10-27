@@ -40,7 +40,6 @@ function loadComments() {
                     commentUpvotes.textContent = `Upvotes: ${comment.upvotes}`;
                     
                     if (isModerator) {
-                        console.log("im in the if");
                         const deleteButton = document.createElement('button');
                         deleteButton.addEventListener('click', function() {
                             deleteComment(comment.id);
@@ -58,9 +57,6 @@ function loadComments() {
             }
         }
     };
-
-    console.log("using loadComments");
-
     xhr.send();
 }
 
