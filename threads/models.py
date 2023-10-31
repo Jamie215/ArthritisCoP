@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Thread(models.Model):
     title = models.CharField(max_length=150)
@@ -8,6 +9,7 @@ class Thread(models.Model):
     upvotes = models.PositiveIntegerField(default=0)
     downvotes = models.PositiveIntegerField(default=0)
     view_count = models.PositiveIntegerField(default=0)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         permissions = [
@@ -20,6 +22,7 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     upvotes = models.PositiveIntegerField(default=0)
     downvotes = models.PositiveIntegerField(default=0)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         permissions = [

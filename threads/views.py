@@ -1,14 +1,48 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from .models import Thread, Comment
-from .forms import ThreadForm, CommentForm
+from .forms import ThreadForm, CommentForm, SignUpForm
+from django.contrib.auth.forms import AuthenticationForm
 
+##################
+## User Related ##
+##################
 
-####################
-## Thread Related ##
-####################
+def register(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data/get('password2')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('home')
+    else:
+        form = SignUpForm()
+    return render(request, 'register.html', {'form':form})
+
+def login_request(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'login.html', {'form':form})
+
+###############################
+## Thread & Comment Related ##
+##############################
 
 def thread_list(request):
     all_threads = Thread.objects.all()
@@ -35,6 +69,7 @@ def thread_detail(request, thread_id):
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
+            comment.author = request.user
             comment.thread = thread
             comment.save()
         else:
@@ -66,7 +101,9 @@ def create_thread(request):
     if request.method == "POST":
         form = ThreadForm(request.POST)
         if form.is_valid():
-            form.save()
+            thread = form.save(commit=False)
+            thread.author = request.user
+            thread.save()
             return redirect('thread_list')
     else:
         form = ThreadForm()

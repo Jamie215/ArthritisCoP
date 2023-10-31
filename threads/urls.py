@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -12,4 +12,7 @@ urlpatterns = [
     path('search/<str:query>/', views.search_results, name='search_results'),
     path('delete_thread/<int:thread_id>/', views.delete_thread, name='delete_thread'),
     path('delete_comment/<int:comment_id>/', views.delete_comment, name='delete_comment'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login_request, name='login'),
+    path('accooutns/', include('django.contrib.auth.urls')),
 ]
