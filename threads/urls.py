@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from . import views
 
@@ -13,6 +14,7 @@ urlpatterns = [
     path('delete_thread/<int:thread_id>/', views.delete_thread, name='delete_thread'),
     path('delete_comment/<int:comment_id>/', views.delete_comment, name='delete_comment'),
     path('register/', views.register, name='register'),
-    path('login/', views.login_request, name='login'),
-    path('accooutns/', include('django.contrib.auth.urls')),
+    path('login/', views.login_request, name='custom_login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
 ]

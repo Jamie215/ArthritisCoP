@@ -17,10 +17,10 @@ def register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            password = form.cleaned_data/get('password2')
+            password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
             login(request, user)
-            return redirect('home')
+            return redirect('thread_list')
     else:
         form = SignUpForm()
     return render(request, 'register.html', {'form':form})
@@ -34,7 +34,7 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('thread_list')
     else:
         form = AuthenticationForm()
 
