@@ -34,7 +34,7 @@ function loadSortedThreads(sortOrder, context=null, query=null) {
 
                 // Description Column
                 const desCol = document.createElement('td');
-                desCol.textcontent = thread.description;
+                desCol.textContent = thread.description;
 
                 // Date Column
                 const dateCol = document.createElement('td');
@@ -47,6 +47,11 @@ function loadSortedThreads(sortOrder, context=null, query=null) {
                 // View Count Column
                 const viewCountCol = document.createElement('td');
                 viewCountCol.textContent = thread.view_count;
+
+                // Author Column
+                const authorCol = document.createElement('td');
+                authorCol.textContent = thread.author;
+                console.log("authorcol", authorCol);
 
                 // Additional Column for Moderators
                 if (isModerator) {
@@ -65,6 +70,7 @@ function loadSortedThreads(sortOrder, context=null, query=null) {
                 row.append(dateCol);
                 row.append(commentCountCol);
                 row.append(viewCountCol);
+                row.append(authorCol);
 
                 threadsContainer.appendChild(row);
             });

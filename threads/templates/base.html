@@ -22,6 +22,17 @@
                 <input type="search" class="form-control rounded" placeholder="Search..." name="q" aria-label="Search"/>
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
+
+            <div class="user-authentication">
+                {% if user.is_authenticated %}
+                    <p>Welcome, {{ user.username }}!</p>
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+                {% endif %}
+            </div>
+            
             <a href="{% url 'create_thread' %}" class="btn btn-primary">Create New Thread</a>
         </div>
     </nav>

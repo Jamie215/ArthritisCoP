@@ -80,7 +80,8 @@ def thread_detail(request, thread_id):
                           "text": comment.text,
                           "date": comment.date.strftime('%Y-%m-%d %H:%M:%S'),
                           "upvotes": comment.upvotes,
-                          "downvotes": comment.downvotes}
+                          "downvotes": comment.downvotes,
+                          "author": comment.author.username}
                           for comment in comments]
         return JsonResponse(comments_data, safe=False)
     else:
@@ -140,7 +141,7 @@ def get_sorted_threads(request):
         threads= threads.order_by('-view_count','-date')
     else:
         threads = Thread.objects.all().order_by('-date')
-
+    
     # Check if the request is Ajax
     data = [{
             'id': thread.id,
@@ -148,7 +149,8 @@ def get_sorted_threads(request):
             'description': thread.description,
             'date': str(thread.date),
             'view_count': thread.view_count,
-            'comment_count': thread.comment_set.count()
+            'comment_count': thread.comment_set.count(),
+            'author': thread.author.username,
         } for thread in threads]
 
     return JsonResponse(data, safe=False)

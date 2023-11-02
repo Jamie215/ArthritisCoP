@@ -27,18 +27,27 @@ function loadComments() {
 
                     let cardBody = document.createElement('div');
                     cardBody.className = 'card-body'
+                    
+                    // Comment Text
                     let commentText = document.createElement('p');
                     commentText.className = 'card-text';
                     commentText.textContent = comment.text;
 
+                    // Comment Created Date
                     let commentDate = document.createElement('p');
                     let smallDate = document.createElement('small');
                     smallDate.textContent = `Posted on ${comment.date}`;
                     commentDate.appendChild(smallDate);
 
+                    // Comment Author
+                    let commentAuthor = document.createElement('p');
+                    commentAuthor.textContent = `Written by ${comment.author}`;
+
+                    // Comment Upvote Information
                     let commentUpvotes = document.createElement('p');
                     commentUpvotes.textContent = `Upvotes: ${comment.upvotes}`;
                     
+                    // Comment Delete Button
                     if (isModerator) {
                         const deleteButton = document.createElement('button');
                         deleteButton.addEventListener('click', function() {
@@ -49,6 +58,7 @@ function loadComments() {
 
                     cardBody.appendChild(commentText);
                     cardBody.appendChild(commentDate);
+                    cardBody.appendChild(commentAuthor);
                     cardBody.appendChild(commentUpvotes);
 
                     commentCard.appendChild(cardBody);
